@@ -24,3 +24,10 @@ export interface Protest {
   organizerOrg?: string | null;
   joinedCount: number;
 }
+
+export interface ProtestOrganizer {
+  id: string;
+  name: string;
+  organization?: string | null;
+  email?: string;
+}

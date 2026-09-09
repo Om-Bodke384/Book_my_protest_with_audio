@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { UserRound, Camera } from "lucide-react";
+import { UserRound, Camera, MapPin } from "lucide-react";
 import { api } from "../api/axios";
 import { useAuthStore } from "../store/authStore";
 import GoogleAuthButton from "../components/GoogleAuthButton";
@@ -72,6 +72,13 @@ export default function ProtesterRegister() {
           <input required type="email" placeholder="Email" className="input-field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
           <input required type="password" placeholder="Password (min 8 characters)" className="input-field" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
           <textarea required placeholder="Address" className="input-field resize-none" rows={2} value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+          <div className="flex gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2.5 text-xs leading-relaxed text-blue-900">
+            <MapPin size={16} className="mt-0.5 shrink-0 text-blue-600" />
+            <p>
+              Your address is used to help show relevant protests near you. We never display your exact address to other people;
+              only a privacy-safe nearby area may be used for map features.
+            </p>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <input placeholder="City" className="input-field" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
             <input placeholder="Phone" className="input-field" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />

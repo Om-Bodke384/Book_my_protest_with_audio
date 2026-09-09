@@ -3,10 +3,10 @@ import { MapPin, Users, Calendar } from "lucide-react";
 import { Protest } from "../types";
 
 const statusStyle: Record<Protest["status"], string> = {
-  upcoming: "bg-ember-50 text-ember-600",
+  upcoming: "bg-blue-50 text-blue-700",
   ongoing: "bg-ember-500 text-white",
-  completed: "bg-ink-900/10 text-ink-900/50",
-  cancelled: "bg-ink-900/10 text-ink-900/40 line-through",
+  completed: "bg-slate-100 text-slate-600",
+  cancelled: "bg-slate-200 text-slate-600 line-through",
 };
 
 export default function ProtestCard({ protest }: { protest: Protest }) {

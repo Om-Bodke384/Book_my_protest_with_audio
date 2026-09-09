@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { MapPin, Calendar, Users, Building2 } from "lucide-react";
+import { MapPin, Calendar, Users, ShieldCheck } from "lucide-react";
 import { api } from "../api/axios";
-import { Protest } from "../types";
+import { Protest, ProtestOrganizer } from "../types";
 import MapView from "../components/MapView";
 import { useAuthStore } from "../store/authStore";
 
 export default function ProtestDetail() {
   const { id } = useParams();
   const { role } = useAuthStore();
-  const [protest, setProtest] = useState<(Protest & { admin?: any }) | null>(null);
+  const [protest, setProtest] = useState<(Protest & { admin?: ProtestOrganizer }) | null>(null);
   const [joined, setJoined] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
@@ -65,13 +65,12 @@ export default function ProtestDetail() {
           <MapPin size={16} className="text-ember-500" /> {protest.address}, {protest.city}
         </div>
         <div className="flex items-center gap-2 text-ink-900/70">
-          <Users size={16} className="text-ember-500" /> {protest.joinedCount} people joined
+          <Users size={16} className="text-blue-600" /> {protest.joinedCount} protesters attending
         </div>
-        {protest.organizerOrg && (
-          <div className="flex items-center gap-2 text-ink-900/70">
-            <Building2 size={16} className="text-ember-500" /> {protest.organizerOrg}
-          </div>
-        )}
+        <div className="flex items-center gap-2 text-ink-900/70">
+          <ShieldCheck size={16} className="text-ink-900" />
+          <span>Organized by {protest.admin?.organization || protest.admin?.name || protest.organizerOrg || protest.organizerName || "Community organizer"}</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
@@ -81,7 +80,11 @@ export default function ProtestDetail() {
         {msg && <span className="text-sm text-ink-900/50">{msg}</span>}
       </div>
 
-      <MapView protests={[protest]} center={[protest.latitude, protest.longitude]} zoom={14} heightClass="h-80" />
+      <div className="space-y-2">
+        <h2 className="font-display text-xl text-ink-900">Registered protest location</h2>
+        <p className="text-sm text-ink-900/50">The pin shows where the organizer registered this protest. The attendee count shows protesters who joined it; their registered addresses are never shown here.</p>
+        <MapView protests={[protest]} center={[protest.latitude, protest.longitude]} zoom={14} heightClass="h-80" />
+      </div>
     </div>
   );
 }
