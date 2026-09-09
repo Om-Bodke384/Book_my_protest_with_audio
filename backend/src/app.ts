@@ -18,7 +18,7 @@ app.use(helmet());
 
 // CLIENT_URL can be a single origin or a comma-separated list, so the same
 // backend can serve a local dev frontend and a deployed one at once.
-const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173" || https://book-my-protest-123.vercel.app)
   .split(",")
   .map((o) => o.trim());
 
