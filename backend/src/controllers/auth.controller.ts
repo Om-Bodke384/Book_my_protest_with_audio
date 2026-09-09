@@ -24,6 +24,11 @@ const adminSchema = z.object({
   organization: z.string().min(2).optional(),
 });
 
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
 // In production the frontend and backend usually live on different domains
 // (e.g. Vercel + Render), so the refresh cookie needs `sameSite: "none"` to
 // be sent cross-site — which in turn requires `secure: true` (HTTPS only).
@@ -68,7 +73,11 @@ export async function registerProtester(req: Request, res: Response) {
 }
 
 export async function loginProtester(req: Request, res: Response) {
-  const { email, password } = req.body as { email: string; password: string };
+  const parsed = loginSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ success: false, message: "Valid email and password are required" });
+  }
+  const { email, password } = parsed.data;
   const user = await db.query.protesters.findFirst({ where: eq(protesters.email, email) });
   if (!user || !user.passwordHash || !user.passwordSalt || !verifyPassword(password, user.passwordHash, user.passwordSalt)) {
     return res.status(401).json({ success: false, message: "Invalid credentials — this account may use Google sign-in" });
@@ -164,7 +173,11 @@ export async function registerAdmin(req: Request, res: Response) {
 }
 
 export async function loginAdmin(req: Request, res: Response) {
-  const { email, password } = req.body as { email: string; password: string };
+  const parsed = loginSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ success: false, message: "Valid email and password are required" });
+  }
+  const { email, password } = parsed.data;
   const user = await db.query.admins.findFirst({ where: eq(admins.email, email) });
   if (!user || !user.passwordHash || !user.passwordSalt || !verifyPassword(password, user.passwordHash, user.passwordSalt)) {
     return res.status(401).json({ success: false, message: "Invalid credentials — this account may use Google sign-in" });

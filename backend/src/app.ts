@@ -16,11 +16,16 @@ app.set("trust proxy", 1);
 
 app.use(helmet());
 
-// CLIENT_URL can be a single origin or a comma-separated list, so the same
-// backend can serve a local dev frontend and a deployed one at once.
-const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173" || https://book-my-protest-123.vercel.app)
-  .split(",")
-  .map((o) => o.trim());
+// CLIENT_URL can be a single origin or a comma-separated list. Keep the
+// deployed frontend and local dev origin as safe defaults so a missing Render
+// environment variable does not break browser requests after deployment.
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://book-my-protest-123.vercel.app",
+  ...(process.env.CLIENT_URL || "").split(","),
+]
+  .map((o) => o.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
